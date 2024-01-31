@@ -38,10 +38,18 @@ jobs:
           cp -r Content bin/Release/net8.0/osx-arm64/publish
       - name: Create ZIP archives
         run: |
-          zip Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-win-x64.zip bin/Release/net8.0/win-x64/publish/**
-          zip Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-linux-x64.zip bin/Release/net8.0/linux-x64/publish/**
-          zip Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-x64.zip bin/Release/net8.0/osx-x64/publish/**
-          zip Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-arm64.zip bin/Release/net8.0/osx-arm64/publish/**
+          pushd bin/Release/net8.0/win-x64/publish
+          zip -r ../../../../../Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-win-x64.zip ./*
+          popd
+          pushd bin/Release/net8.0/linux-x64/publish
+          zip -r ../../../../../Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-linux-x64.zip ./*
+          popd
+          pushd bin/Release/net8.0/osx-x64/publish
+          zip -r ../../../../../Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-x64.zip ./*
+          popd
+          pushd bin/Release/net8.0/osx-arm64/publish
+          zip -r ../../../../../Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-arm64.zip ./*
+          popd
       - name: Publish Github Release
         uses: ncipollo/release-action@v1
         with:
