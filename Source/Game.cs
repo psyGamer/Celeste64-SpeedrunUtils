@@ -52,12 +52,12 @@ public class Game : Module
 	private static Game? instance;
 	public static Game Instance => instance ?? throw new Exception("Game isn't running");
 
-	private readonly Stack<Scene> scenes = new();
+	public readonly Stack<Scene> scenes = new(); // SpeedrunUtils: publicized
 	private readonly Target target = new(Width, Height, [TextureFormat.Color, TextureFormat.Depth24Stencil8]);
 	private readonly Batcher batcher = new();
 	private Transition transition;
 	public TransitionStep transitionStep = TransitionStep.None; // SpeedrunUtils: publicized
-	private readonly FMOD.Studio.EVENT_CALLBACK audioEventCallback;
+	public readonly FMOD.Studio.EVENT_CALLBACK audioEventCallback; // SpeedrunUtils: publicized
 	private int audioBeatCounter;
 	private bool audioBeatCounterEvent;
 
