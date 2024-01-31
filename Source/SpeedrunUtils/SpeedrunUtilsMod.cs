@@ -24,19 +24,22 @@ public static class SpeedrunUtilsMod
         });
     }
     
-    private static SaveState? currentState;
     
     public static void Unload()
     {
         
     }
     
+    private const int MaxSaveStateSlots = 10;
+    private static int currentSlot = 0;
     private static bool loadQueued = false;
+    private static readonly SaveState?[] currentStates = new SaveState[MaxSaveStateSlots];
     public static void Update()
     {
         if (SpeedrunUtilsControls.SaveState.Pressed)
         {
-            currentState = SaveState.Create();
+            currentStates[currentSlot]?.Clear();
+            currentStates[currentSlot] = SaveState.Create();
         }
         if (SpeedrunUtilsControls.LoadState.Pressed || loadQueued)
         {
@@ -47,9 +50,26 @@ public static class SpeedrunUtilsMod
                 loadQueued = true;
             } else
             {
-                currentState?.Load();
+                currentStates[currentSlot]?.Load();
                 loadQueued = false;
             }
         }
+        if (SpeedrunUtilsControls.ClearState.Pressed)
+        {
+            currentStates[currentSlot]?.Clear();
+            currentStates[currentSlot] = null;
+        }
+        
+        // Switch save state slot
+        if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D1)) currentSlot = 0;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D2)) currentSlot = 1;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D3)) currentSlot = 2;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D4)) currentSlot = 3;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D5)) currentSlot = 4;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D6)) currentSlot = 5;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D7)) currentSlot = 6;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D8)) currentSlot = 7;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D9)) currentSlot = 8;
+        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D0)) currentSlot = 9;
     }
 }

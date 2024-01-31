@@ -39,4 +39,18 @@ public record SaveState
             PerformAssetReload = true
         });
     }
+    
+    public void Clear()
+    {
+        // Dispose resources of the World
+        if (World.postTarget != null && PreventDispose.Contains(World.postTarget))
+        {
+            PreventDispose.Remove(World.postTarget);
+            if (Game.Scene is not World world) return;
+            if (World.postTarget == world.postTarget) return; // It's still currently in use
+
+            World.postTarget.Dispose();
+            World.postTarget = null;
+        }
+    }
 }
