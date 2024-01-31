@@ -1,0 +1,49 @@
+name: Publish Release
+on:
+  workflow_dispatch:
+  push:
+    tags: [ '*' ]
+
+jobs:
+  build:
+    name: Build and Publish Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Fetch all tags
+        run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      - name: Get current tag
+        run: echo "CURRENT_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+      - name: Restore
+        run: dotnet restore
+      - name: Build Windows x86_64
+        run: dotnet publish -c Release -r win-x64 --self-contained --no-restore
+      - name: Build Linux x86_64
+        run: dotnet publish -c Release -r linux-x64 --self-contained --no-restore
+      - name: Build MacOS x86_64
+        run: dotnet publish -c Release -r osx-x64 --self-contained --no-restore
+      - name: Build MacOS ARM64
+        run: dotnet publish -c Release -r osx-arm64 --self-contained --no-restore
+      - name: Copy Content
+        run: |
+          cp -r Content bin/Release/net8.0/win-x64/publish
+          cp -r Content bin/Release/net8.0/linux-x64/publish
+          cp -r Content bin/Release/net8.0/osx-x64/publish
+          cp -r Content bin/Release/net8.0/osx-arm64/publish
+      - name: Create ZIP archives
+        run: |
+          zip Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-win-x64.zip bin/Release/net8.0/win-x64/publish/**
+          zip Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-linux-x64.zip bin/Release/net8.0/linux-x64/publish/**
+          zip Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-x64.zip bin/Release/net8.0/osx-x64/publish/**
+          zip Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-arm64.zip bin/Release/net8.0/osx-arm64/publish/**
+      - name: Publish Github Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifactErrorsFailBuild: true
+          tag: ${{env.CURRENT_TAG}}
+          name: Celeste64 SpeedrunUtils v${{env.CURRENT_TAG}}
+          makeLatest: true
+          generateReleaseNotes: true
+          artifacts: "Celeste64-SpeedrunUtils-*.zip"
+          
