@@ -1,4 +1,6 @@
 
+using Celeste64.SpeedrunUtils;
+
 namespace Celeste64;
 
 public static class Controls
@@ -55,6 +57,8 @@ public static class Controls
 		Pause.Clear();
 		Pause.Add(0, Buttons.Start, Buttons.Select, Buttons.Back);
 		Pause.Add(0, Keys.Enter, Keys.Escape);
+        
+        SpeedrunUtilsControls.Load();
 	}
 
 	public static void Consume()

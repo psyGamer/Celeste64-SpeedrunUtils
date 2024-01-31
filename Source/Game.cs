@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using Celeste64.SpeedrunUtils;
 
 namespace Celeste64;
 
@@ -26,7 +27,7 @@ public struct Transition
 
 public class Game : Module
 {
-	private enum TransitionStep
+	public enum TransitionStep // SpeedrunUtils: publicized
 	{
 		None,
 		FadeOut,
@@ -55,13 +56,15 @@ public class Game : Module
 	private readonly Target target = new(Width, Height, [TextureFormat.Color, TextureFormat.Depth24Stencil8]);
 	private readonly Batcher batcher = new();
 	private Transition transition;
-	private TransitionStep transitionStep = TransitionStep.None;
+	public TransitionStep transitionStep = TransitionStep.None; // SpeedrunUtils: publicized
 	private readonly FMOD.Studio.EVENT_CALLBACK audioEventCallback;
 	private int audioBeatCounter;
 	private bool audioBeatCounterEvent;
 
 	public AudioHandle Ambience;
 	public AudioHandle Music;
+    
+    public static Scene? Scene => Instance.scenes.Count > 0 ? Instance.scenes.Peek() : null;
 
 	public Game()
 	{
@@ -78,12 +81,16 @@ public class Game : Module
 		App.Title = GameTitle;
 		Audio.Init();
 		Controls.Load();
+        
+        SpeedrunUtilsMod.Load();
 
 		scenes.Push(new Startup());
 	}
 
 	public override void Shutdown()
 	{
+        SpeedrunUtilsMod.Unload();
+        
 		if (scenes.TryPeek(out var topScene))
 			topScene.Exited();
 
@@ -114,6 +121,8 @@ public class Game : Module
 
 	public override void Update()
 	{
+        SpeedrunUtilsMod.Update();
+        
 		// update top scene
 		if (scenes.TryPeek(out var scene))
 		{

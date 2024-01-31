@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Celeste64.SpeedrunUtils;
 using ModelEntry = (Celeste64.Actor Actor, Celeste64.Model Model);
 
 namespace Celeste64;
@@ -27,7 +28,7 @@ public class World : Scene
 	private readonly List<ModelEntry> models = [];
 	private readonly List<Sprite> sprites = [];
 
-	private Target? postTarget;
+	public Target? postTarget; // SpeedrunUtils: publicized
 	private readonly Material postMaterial = new();
 	private readonly Batcher batch = new();
 	private readonly List<Skybox> skyboxes = [];
@@ -144,7 +145,8 @@ public class World : Scene
 			ResolveChanges();
 		}
 
-		postTarget?.Dispose();
+        if (postTarget != null && !SaveState.PreventDispose.Contains(postTarget)) 
+		    postTarget.Dispose();
 		postTarget = null;
 	}
 
