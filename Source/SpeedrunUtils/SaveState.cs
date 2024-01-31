@@ -28,8 +28,12 @@ public record SaveState
     
     public void Load()
     {
-        // Save.Instance.EraseRecord(Record.ID);
-        // Save.Instance.Records.Add(Record);
+        // Don't save-state time
+        var prevTime = Save.CurrentRecord.Time;
+        Save.Instance.EraseRecord(Record.ID);
+        Save.Instance.Records.Add(Record);
+        Save.Instance.LevelID = Record.ID;
+        Save.CurrentRecord.Time = prevTime;
         Game.Instance.Goto(new Transition()
         {
             Mode = Transition.Modes.Replace,
@@ -52,5 +56,22 @@ public record SaveState
             World.postTarget.Dispose();
             World.postTarget = null;
         }
+    }
+
+    public static void Configure()
+    {
+        DeepCloner.SetKnownTypesProcessor(type =>
+        {
+            if (
+                // Foster Graphics Resources
+                type.IsAssignableTo(typeof(Material)) ||
+                type.IsAssignableTo(typeof(Texture)) ||
+                type.IsAssignableTo(typeof(Mesh)) ||
+                type.IsAssignableTo(typeof(Batcher)) ||
+                type.IsAssignableTo(typeof(Target))
+            ) return true;
+            
+            return null;
+        });
     }
 }

@@ -6,22 +6,7 @@ public static class SpeedrunUtilsMod
 {
     public static void Load()
     {
-        DeepCloner.SetKnownTypesProcessor(type =>
-        {
-            if (
-                // Celeste64 Resources
-                type.IsAssignableTo(typeof(Model)) ||
-                
-                // Foster Graphics Resources
-                type.IsAssignableTo(typeof(Material)) ||
-                type.IsAssignableTo(typeof(Texture)) ||
-                type.IsAssignableTo(typeof(Mesh)) ||
-                type.IsAssignableTo(typeof(Batcher)) ||
-                type.IsAssignableTo(typeof(Target))
-            ) return true;
-            
-            return null;
-        });
+        SaveState.Configure();
     }
     
     
@@ -60,7 +45,7 @@ public static class SpeedrunUtilsMod
             currentStates[currentSlot] = null;
         }
         
-        // Switch save state slot
+        // Switch between save-state slots
         if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D1)) currentSlot = 0;
         else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D2)) currentSlot = 1;
         else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D3)) currentSlot = 2;
