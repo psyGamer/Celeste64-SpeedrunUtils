@@ -313,7 +313,7 @@ public class Game : Module
 			// draw the world to the target
 			if (scenes.TryPeek(out var scene))
 				scene.Render(target);
-
+            
 			// draw screen wipe over top
 			if (transitionStep != TransitionStep.None && transition.ToBlack != null)
 			{
@@ -321,6 +321,8 @@ public class Game : Module
 				batcher.Render(target);
 				batcher.Clear();
 			}
+            
+            SpeedrunUtilsMod.Render(target);
 
 			// draw the target to the window
 			{
