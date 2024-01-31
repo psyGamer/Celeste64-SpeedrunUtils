@@ -30,8 +30,7 @@ public record SaveState
     {
         // Don't save-state time
         var prevTime = Save.CurrentRecord.Time;
-        Save.Instance.EraseRecord(Record.ID);
-        Save.Instance.Records.Add(Record);
+        Record.DeepCloneTo(Save.CurrentRecord);
         Save.Instance.LevelID = Record.ID;
         Save.CurrentRecord.Time = prevTime;
         
