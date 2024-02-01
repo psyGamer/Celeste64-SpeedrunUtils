@@ -15,12 +15,12 @@ public static class UI
 		batch.Text(font, text, at, justify, color);
 	}
 
-	public static void Icon(Batcher batch, string icon, string label, in Vec2 at, float align = 0)
+	public static void Icon(Batcher batch, string icon, string label, in Vec2 at, float align = 0, Color? labelColor = null)
 	{
-		Icon(batch, Assets.Subtextures.GetValueOrDefault(icon), label, at, align);
+		Icon(batch, Assets.Subtextures.GetValueOrDefault(icon), label, at, align, labelColor);
 	}
 	
-	public static void Icon(Batcher batch, Subtexture icon, string label, in Vec2 at, float align = 0)
+	public static void Icon(Batcher batch, Subtexture icon, string label, in Vec2 at, float align = 0, Color? labelColor = null)
 	{
 		var pos = at;
 		var size = IconSize;
@@ -38,17 +38,17 @@ public static class UI
 				batch.ImageFit(icon, new Rect(pos.X + x, pos.Y + y, size, size), Vec2.One * 0.50f, Color.Black, false, false);
 		batch.ImageFit(icon, new Rect(pos.X, pos.Y, size, size), Vec2.One * 0.50f, Color.White, false, false);
 		
-		Text(batch, label, new Vec2(pos.X + iconAdvance, pos.Y + size / 2), new Vec2(0, 0.5f), Color.White);
+		Text(batch, label, new Vec2(pos.X + iconAdvance, pos.Y + size / 2), new Vec2(0, 0.5f), labelColor ?? Color.White);
 	}
 
-	public static void Timer(Batcher batch, TimeSpan time, in Vec2 at, float align = 0)
+	public static void Timer(Batcher batch, TimeSpan time, in Vec2 at, float align = 0, Color? labelColor = null)
 	{
 		string str;
 		if ((int)time.TotalHours > 0)
 			str = $"{((int)time.TotalHours):00}:{time.Minutes:00}:{time.Seconds:00}:{time.Milliseconds:000}";
 		else
 			str = $"{time.Minutes:00}:{time.Seconds:00}:{time.Milliseconds:000}";
-		Icon(batch, "icon_stopwatch", str, at, align);
+		Icon(batch, "icon_stopwatch", str, at, align, labelColor);
 	}
 
 	public static void Strawberries(Batcher batch, int count, in Vec2 at, float align = 0)

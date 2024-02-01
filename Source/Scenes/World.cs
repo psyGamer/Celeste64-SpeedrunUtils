@@ -779,7 +779,7 @@ public class World : Scene
 				var at = bounds.TopLeft + new Vec2(4, 8);
 				if (IsInEndingArea || Save.Instance.SpeedrunTimer)
 				{
-					UI.Timer(batch, Save.CurrentRecord.Time, at);
+					UI.Timer(batch, Save.CurrentRecord.Time, at, 0.0f, IsInEndingArea ? Color.CornflowerBlue : Color.White);
 					at.Y += UI.IconSize + 4;
 				}
 
