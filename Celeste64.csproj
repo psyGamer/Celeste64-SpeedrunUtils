@@ -18,15 +18,15 @@
         <PackageReference Include="Sledge.Formats.Map" Version="1.1.5" />
     </ItemGroup>
 
-    <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('linux'))">
+    <ItemGroup Condition="($(RuntimeIdentifier) == '' And $([MSBuild]::IsOSPlatform('Linux'))) Or $(RuntimeIdentifier.StartsWith('linux'))">
         <Content Include="Source/Audio/FMOD/libs/lib64/**" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
     </ItemGroup>
 
-    <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('win'))"> 
+    <ItemGroup Condition="($(RuntimeIdentifier) == '' And $([MSBuild]::IsOSPlatform('Windows'))) Or $(RuntimeIdentifier.StartsWith('win'))"> 
         <Content Include="Source/Audio/FMOD/libs/x64/**" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
     </ItemGroup>
     
-    <ItemGroup Condition="$(RuntimeIdentifier.StartsWith('osx'))">
+    <ItemGroup Condition="($(RuntimeIdentifier) == '' And $([MSBuild]::IsOSPlatform('OSX'))) Or $(RuntimeIdentifier.StartsWith('osx'))">
         <Content Include="Source/Audio/FMOD/libs/osx/**" CopyToOutputDirectory="PreserveNewest" Link="%(Filename)%(Extension)" />
     </ItemGroup>
 
