@@ -28,14 +28,11 @@ jobs:
         run: dotnet publish -c Release -r linux-x64 --self-contained
       - name: Build MacOS x86_64
         run: dotnet publish -c Release -r osx-x64 --self-contained
-      - name: Build MacOS ARM64
-        run: dotnet publish -c Release -r osx-arm64 --self-contained
       - name: Copy Content
         run: |
           cp -r Content bin/Release/net8.0/win-x64/publish
           cp -r Content bin/Release/net8.0/linux-x64/publish
           cp -r Content bin/Release/net8.0/osx-x64/publish
-          cp -r Content bin/Release/net8.0/osx-arm64/publish
       - name: Create ZIP archives
         run: |
           pushd bin/Release/net8.0/win-x64/publish
@@ -47,15 +44,12 @@ jobs:
           pushd bin/Release/net8.0/osx-x64/publish
           zip -r ../../../../../Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-x64.zip ./*
           popd
-          pushd bin/Release/net8.0/osx-arm64/publish
-          zip -r ../../../../../Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-arm64.zip ./*
-          popd
       - name: Publish Github Release
         uses: ncipollo/release-action@v1
         with:
           artifactErrorsFailBuild: true
           tag: ${{env.CURRENT_TAG}}
-          name: Celeste64 SpeedrunUtils v${{env.CURRENT_TAG}}
+          name: Celeste 64 SpeedrunUtils v${{env.CURRENT_TAG}}
           makeLatest: true
           generateReleaseNotes: true
           artifacts: "Celeste64-SpeedrunUtils-*.zip"
