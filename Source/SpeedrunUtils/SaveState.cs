@@ -75,13 +75,10 @@ public record SaveState
         }
         else
         {
-            Game.Instance.Goto(new Transition()
+            Game.Instance.Goto(new Transition
             {
                 Mode = Transition.Modes.Replace,
                 Scene = () => World.DeepClone(), // We need to deep-clone again, to allow loading the state multiple times
-                ToPause = true,
-                ToBlack = new AngledWipe(),
-                PerformAssetReload = true
             });
         }
     }
