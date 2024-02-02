@@ -45,12 +45,18 @@ jobs:
           zip -r ../../../../../Celeste64-SpeedrunUtils-${{env.CURRENT_TAG}}-osx-x64.zip ./*
           popd
       - name: Publish Github Release
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
         with:
-          artifactErrorsFailBuild: true
-          tag: ${{env.CURRENT_TAG}}
           name: Celeste 64 SpeedrunUtils v${{env.CURRENT_TAG}}
-          makeLatest: true
-          generateReleaseNotes: true
-          artifacts: "Celeste64-SpeedrunUtils-*.zip"
-          
+          body: |
+            # Instructions:
+            
+            - Download and extract the zip file below according to your computer 
+            - Run the Celeste64 application from the extracted files
+            
+            # Requirements:
+            
+            - **Windows:** 10 or later, x64
+            - **Linux:** [Distro support list](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md), x64
+            - **Mac:** Monterey or later, x64 Intel-based or Apple Silicon with Rosetta
+          files: Celeste64-SpeedrunUtils-*.zip
