@@ -41,7 +41,7 @@ public class Game : Module
 	public const int Width = 640;
 	public const int Height = 360;
 	public static readonly Version Version = typeof(Game).Assembly.GetName().Version!;
-    public static readonly Version SpeedrunUtilsVersion = new Version(0, 2, 1);
+    public static readonly Version SpeedrunUtilsVersion = new Version(0, 2, 2);
 	public static readonly string VersionString = $"v.{Version.Major}.{Version.Minor}.{Version.Build} - SpeedrunUtils v.{SpeedrunUtilsVersion.Major}.{SpeedrunUtilsVersion.Minor}.{SpeedrunUtilsVersion.Build}";
 
 	/// <summary>
