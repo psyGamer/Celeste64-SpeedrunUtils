@@ -28,7 +28,7 @@ public class World : Scene
 	private readonly List<ModelEntry> models = [];
 	private readonly List<Sprite> sprites = [];
 
-	public Target? postTarget; // SpeedrunUtils: publicized
+    private Target? postTarget;
 	private readonly Material postMaterial = new();
 	private readonly Batcher batch = new();
 	private readonly List<Skybox> skyboxes = [];
@@ -145,8 +145,7 @@ public class World : Scene
 			ResolveChanges();
 		}
 
-        if (postTarget != null && !SaveState.PreventDispose.Contains(postTarget)) 
-		    postTarget.Dispose();
+        postTarget?.Dispose();
 		postTarget = null;
 	}
 
@@ -821,7 +820,7 @@ public class World : Scene
 		// perform post processing effects
 		if (Camera.Target != null)
 		{
-			if (postTarget == null || postTarget.Width < Camera.Target.Width || postTarget.Height < Camera.Target.Height)
+			if (postTarget == null || postTarget.IsDisposed || postTarget.Width < Camera.Target.Width || postTarget.Height < Camera.Target.Height)
 			{
 				postTarget?.Dispose();
 				postTarget = new(Camera.Target.Width, Camera.Target.Height);
