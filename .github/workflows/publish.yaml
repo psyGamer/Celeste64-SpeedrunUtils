@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     tags: [ '*' ]
-    
+
 permissions:
   contents: write
 
@@ -22,12 +22,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.x'
-      - name: Build Windows x86_64
-        run: dotnet publish -c Release -r win-x64 --self-contained
-      - name: Build Linux x86_64
-        run: dotnet publish -c Release -r linux-x64 --self-contained
-      - name: Build MacOS x86_64
-        run: dotnet publish -c Release -r osx-x64 --self-contained
+      - name: Build Windows x86-64
+        run: dotnet publish -c Release -r win-x64 "-p:EmbeddedBuildProperty=ModVersion=${{env.CURRENT_TAG}}"
+      - name: Build Linux x86-64
+        run: dotnet publish -c Release -r linux-x64 "-p:EmbeddedBuildProperty=ModVersion=${{env.CURRENT_TAG}}"
+      - name: Build macOS x86-64
+        run: dotnet publish -c Release -r osx-x64 "-p:EmbeddedBuildProperty=ModVersion=${{env.CURRENT_TAG}}"
       - name: Copy Content
         run: |
           cp -r Content bin/Release/net8.0/win-x64/publish
@@ -47,16 +47,17 @@ jobs:
       - name: Publish Github Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: ${{env.CURRENT_TAG}}
           name: Celeste 64 SpeedrunUtils v${{env.CURRENT_TAG}}
           body: |
             # Instructions:
-            
-            - Download and extract the zip file below according to your computer 
+
+            - Download and extract the zip file below according to your computer
             - Run the Celeste64 application from the extracted files
-            
+
             # Requirements:
-            
+
             - **Windows:** 10 or later, x64
             - **Linux:** [Distro support list](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md), x64
-            - **Mac:** Monterey or later, x64 Intel-based or Apple Silicon with Rosetta
+            - **macOS:** Monterey or later, x64 Intel-based or Apple Silicon with Rosetta
           files: Celeste64-SpeedrunUtils-*.zip

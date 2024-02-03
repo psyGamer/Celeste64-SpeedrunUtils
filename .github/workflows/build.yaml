@@ -1,0 +1,39 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    branches: [ '*' ]
+    paths-ignore:
+      - "ReadMe.md"
+      - ".gitignore"
+      - ".editorconfig"
+  pull_request:
+    branches: [ '*' ]
+    paths-ignore:
+      - "ReadMe.md"
+      - ".gitignore"
+      - ".editorconfig"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Get current commit
+        run: echo "CURRENT_COMMIT=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
+      - name: Build
+        run: dotnet publish -r win-x64 -c Release "-p:EmbeddedBuildProperty=ModVersion=${{env.CURRENT_COMMIT}}-dev"
+      - name: Copy Content
+        run: cp -r Content bin/Release/net8.0/win-x64/publish
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Celeste64-SpeedrunUtils-${{env.CURRENT_COMMIT}}
+          path: bin/Release/net8.0/win-x64/publish
+
