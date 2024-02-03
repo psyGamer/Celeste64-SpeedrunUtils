@@ -328,11 +328,16 @@ public class Overworld : Scene
 				Matrix.CreateRotationZ((state == States.Entering ? -1 : 1) * rotation * MathF.PI) *
 				Matrix.CreateTranslation(position);
 
-			material.Set("u_matrix", matrix * camera.ViewProjection);
-			material.Set("u_near", camera.NearPlane);
-			material.Set("u_far", camera.FarPlane);
-			material.Set("u_texture", it.Target);
-			material.Set("u_texture_sampler", new TextureSampler(TextureFilter.Linear, TextureWrap.ClampToEdge, TextureWrap.ClampToEdge));
+            if (material.Shader?.Has("u_matrix") ?? false)
+			    material.Set("u_matrix", matrix * camera.ViewProjection);
+            if (material.Shader?.Has("u_near") ?? false)
+			    material.Set("u_near", camera.NearPlane);
+            if (material.Shader?.Has("u_far") ?? false)
+			    material.Set("u_far", camera.FarPlane);
+            if (material.Shader?.Has("u_texture") ?? false)
+			    material.Set("u_texture", it.Target);
+            if (material.Shader?.Has("u_texture_sampler") ?? false)
+			    material.Set("u_texture_sampler", new TextureSampler(TextureFilter.Linear, TextureWrap.ClampToEdge, TextureWrap.ClampToEdge));
 
 			var cmd = new DrawCommand(target, mesh, material)
 			{
@@ -378,7 +383,10 @@ public class Overworld : Scene
 				UI.Prompt(batch, Controls.Cancel, cancelPrompt, at, out width, 1.0f);
 				at.X -= width + 8 * Game.RelativeScale;
 				UI.Prompt(batch, Controls.Confirm, "Confirm", at, out _, 1.0f);
-			}
+
+				// show version number on Overworld as well
+                UI.Text(batch, Game.VersionString, bounds.BottomLeft + new Vec2(4, -4) * Game.RelativeScale, new Vec2(0, 1), Color.White * 0.25f);
+            }
 
 			if (cameraCloseUpEase > 0)
 			{

@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Text.Json;
 using Celeste64.SpeedrunUtils;
 
@@ -177,10 +177,7 @@ public class Game : Module
 
 			// perform game save between transitions
 			if (transition.Saving)
-			{
-				using var stream = File.Create(Path.Join(App.UserPath, Save.FileName));
-				Save.Serialize(stream, Save.Instance);
-			}
+				Save.Instance.SaveToFile();
 
 			// perform transition
 			switch (transition.Mode)
@@ -337,7 +334,7 @@ public class Game : Module
 
 	private FMOD.RESULT MusicTimelineCallback(FMOD.Studio.EVENT_CALLBACK_TYPE type, IntPtr _event, IntPtr parameters)
 	{
-		// notify that an audio event happend (but handle it on the main thread)
+		// notify that an audio event happened (but handle it on the main thread)
 		if (transitionStep == TransitionStep.None)
 			audioBeatCounterEvent = true;
 		return FMOD.RESULT.OK;
