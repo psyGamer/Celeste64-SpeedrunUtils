@@ -20,6 +20,7 @@ public class Save
 		public Dictionary<string, int> Flags { get; set; } = []; 
 		public int Deaths { get; set; } = 0;
 		public TimeSpan Time { get; set; } = new();
+		public TimeSpan TimePractice { get; set; } = new();
 
 		public int GetFlag(string name, int defaultValue = 0) 
 			=> Flags.TryGetValue(name, out int value) ? value : defaultValue;
@@ -29,6 +30,9 @@ public class Save
 
 		public int IncFlag(string name) 
 			=> Flags[name] = GetFlag(name) + 1;
+
+		public void ResetPracticeTimer()
+			=> TimePractice = new TimeSpan();
 	}
 
 	public static Save Instance = new();
@@ -57,6 +61,15 @@ public class Save
 	/// If the Speedrun Timer should be visible while playing
 	/// </summary>
 	public bool SpeedrunTimer { get; set; } = false;
+
+	/// <summary>
+	/// If the Speeedrun Timer should display in "practice" mode rather than show the total playtime
+	/// When practice mode is enabled:
+	///  - Increment the timer while the player has control
+	///  - Reset the timer on respawn and after entering a cassette room
+	///  - Pause the timer when collecting a strawberry and when entering a cassette room
+	/// </summary>
+	public bool SpeedrunTimerPracticeMode { get; set; } = false;
 
 	/// <summary>
 	/// 0-10 Music volume level
@@ -126,6 +139,16 @@ public class Save
 	public void ToggleTimer()
 	{
 		SpeedrunTimer = !SpeedrunTimer;
+	}
+	
+	public void TogglePracticeTimer()
+	{
+		SpeedrunTimerPracticeMode = !SpeedrunTimerPracticeMode;
+	}
+
+	public TimeSpan GetCurrentDisplayTime()
+	{
+		return !SpeedrunTimerPracticeMode ? CurrentRecord.Time : CurrentRecord.TimePractice;
 	}
 
 	public void SetMusicVolume(int value)
