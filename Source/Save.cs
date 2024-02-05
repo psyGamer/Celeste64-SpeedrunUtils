@@ -20,7 +20,7 @@ public class Save
 		public Dictionary<string, int> Flags { get; set; } = []; 
 		public int Deaths { get; set; } = 0;
 		public TimeSpan Time { get; set; } = new();
-		public TimeSpan TimePractice { get; set; } = new();
+		public TimeSpan SpeedrunPracticeTime { get; set; } = new();
 
 		public int GetFlag(string name, int defaultValue = 0) 
 			=> Flags.TryGetValue(name, out int value) ? value : defaultValue;
@@ -31,8 +31,8 @@ public class Save
 		public int IncFlag(string name) 
 			=> Flags[name] = GetFlag(name) + 1;
 
-		public void ResetPracticeTimer()
-			=> TimePractice = new TimeSpan();
+		public void ResetSpeedrunPracticeTime()
+			=> SpeedrunPracticeTime = new TimeSpan();
 	}
 
 	public static Save Instance = new();
@@ -69,7 +69,7 @@ public class Save
 	///  - Reset the timer on respawn and after entering a cassette room
 	///  - Pause the timer when collecting a strawberry and when entering a cassette room
 	/// </summary>
-	public bool SpeedrunTimerPracticeMode { get; set; } = false;
+	public bool SpeedrunPracticeTimer { get; set; } = false;
 
 	/// <summary>
 	/// 0-10 Music volume level
@@ -141,14 +141,16 @@ public class Save
 		SpeedrunTimer = !SpeedrunTimer;
 	}
 	
-	public void TogglePracticeTimer()
+	public void ToggleSpeedrunPracticeTime()
 	{
-		SpeedrunTimerPracticeMode = !SpeedrunTimerPracticeMode;
+		SpeedrunPracticeTimer = !SpeedrunPracticeTimer;
 	}
 
 	public TimeSpan GetCurrentDisplayTime()
 	{
-		return !SpeedrunTimerPracticeMode ? CurrentRecord.Time : CurrentRecord.TimePractice;
+		return SpeedrunPracticeTimer 
+            ? CurrentRecord.SpeedrunPracticeTime 
+            : CurrentRecord.Time;
 	}
 
 	public void SetMusicVolume(int value)

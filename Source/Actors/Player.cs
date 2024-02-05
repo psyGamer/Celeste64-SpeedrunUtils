@@ -171,10 +171,6 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	private bool InBubble
 		=> stateMachine.State == States.Bubble;
 	
-	public bool InPausePracticeTimerState 
-		=> stateMachine.State == States.StrawbGet
-		|| stateMachine.State == States.Cassette;
-
 	public bool IsStrawberryCounterVisible
 		=> stateMachine.State == States.StrawbGet;
 
@@ -191,6 +187,10 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		&& stateMachine.State != States.StrawbGet
 		&& stateMachine.State != States.Cassette
 		&& stateMachine.State != States.Dead;
+    
+    public bool IsSpeedrunPracticeTimePaused 
+        => stateMachine.State == States.StrawbGet 
+        || stateMachine.State == States.Cassette;
 
 	public Player()
 	{
@@ -263,7 +263,7 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		World.Camera.LookAt = target;
 		World.Camera.Position = orig;
 		
-		Save.CurrentRecord.ResetPracticeTimer();
+		Save.CurrentRecord.ResetSpeedrunPracticeTime();
 	}
 
 	public override void Update()

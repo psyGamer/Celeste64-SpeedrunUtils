@@ -46,14 +46,14 @@ public class World : Scene
 
 	private bool IsInEndingArea => Get<Player>() is {} player && Overlaps<EndingArea>(player.Position);
 	
-	private bool IsPracticeTimerPauseState => Get<Player>() is { } player && player.InPausePracticeTimerState;
+	private bool IsSpeedrunPracticeTimerPaused => Get<Player>() is { } player && player.IsSpeedrunPracticeTimePaused;
 
-	private bool IsPracticeTimerRunState
+	private bool IsSpeedrunPracticeTimerRunning
 	{
 		get
 		{
 			if (Game.Instance.IsMidTransition) return false;
-			if (Get<Player>() is not Player player) return true;
+			if (Get<Player>() is not { } player) return true;
 			return player.IsAbleToPause;
 		}
 	}
@@ -96,7 +96,7 @@ public class World : Scene
 			optionsMenu.Add(new Menu.Toggle("Fullscreen", Save.Instance.ToggleFullscreen, () => Save.Instance.Fullscreen));
 			optionsMenu.Add(new Menu.Toggle("Z-Guide", Save.Instance.ToggleZGuide, () => Save.Instance.ZGuide));
 			optionsMenu.Add(new Menu.Toggle("Timer", Save.Instance.ToggleTimer, () => Save.Instance.SpeedrunTimer));
-			optionsMenu.Add(new Menu.Toggle("Timer > Practice Mode", Save.Instance.TogglePracticeTimer, () => Save.Instance.SpeedrunTimerPracticeMode));
+			optionsMenu.Add(new Menu.Toggle("Speedrun Practice Timer", Save.Instance.ToggleSpeedrunPracticeTime, () => Save.Instance.SpeedrunPracticeTimer));
 
 			optionsMenu.Add(new Menu.Spacer());
 			optionsMenu.Add(new Menu.Slider("BGM", 0, 10, () => Save.Instance.MusicVolume, Save.Instance.SetMusicVolume));
@@ -303,9 +303,9 @@ public class World : Scene
 		}
 
 		// increment practice timer
-		if (IsPracticeTimerRunState)
+		if (IsSpeedrunPracticeTimerRunning)
 		{
-			Save.CurrentRecord.TimePractice += TimeSpan.FromSeconds(Time.Delta);
+			Save.CurrentRecord.SpeedrunPracticeTime += TimeSpan.FromSeconds(Time.Delta);
 		}
 
 		// handle strawb counter
@@ -810,11 +810,11 @@ public class World : Scene
 					{
 						timerDisplayColor = Color.CornflowerBlue;
 					}
-					else if (Save.Instance.SpeedrunTimerPracticeMode && IsPracticeTimerPauseState) 
+					else if (Save.Instance.SpeedrunPracticeTimer && IsSpeedrunPracticeTimerPaused) 
 					{
 						timerDisplayColor = Color.Yellow;
 					}
-					else if (Save.Instance.SpeedrunTimerPracticeMode && !IsPracticeTimerRunState)
+					else if (Save.Instance.SpeedrunPracticeTimer && !IsSpeedrunPracticeTimerRunning)
 					{
 						timerDisplayColor = Color.Gray;
 					}
