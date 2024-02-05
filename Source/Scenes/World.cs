@@ -45,6 +45,19 @@ public class World : Scene
 	private int strawbCounterWas;
 
 	private bool IsInEndingArea => Get<Player>() is {} player && Overlaps<EndingArea>(player.Position);
+	
+	private bool IsPracticeTimerPauseState => Get<Player>() is { } player && player.InPausePracticeTimerState;
+
+	private bool IsPracticeTimerRunState
+	{
+		get
+		{
+			if (Game.Instance.IsMidTransition) return false;
+			if (Get<Player>() is not Player player) return true;
+			return player.IsAbleToPause;
+		}
+	}
+	
 	private bool IsPauseEnabled
 	{
 		get
@@ -83,6 +96,8 @@ public class World : Scene
 			optionsMenu.Add(new Menu.Toggle("Fullscreen", Save.Instance.ToggleFullscreen, () => Save.Instance.Fullscreen));
 			optionsMenu.Add(new Menu.Toggle("Z-Guide", Save.Instance.ToggleZGuide, () => Save.Instance.ZGuide));
 			optionsMenu.Add(new Menu.Toggle("Timer", Save.Instance.ToggleTimer, () => Save.Instance.SpeedrunTimer));
+			optionsMenu.Add(new Menu.Toggle("Timer > Practice Mode", Save.Instance.TogglePracticeTimer, () => Save.Instance.SpeedrunTimerPracticeMode));
+
 			optionsMenu.Add(new Menu.Spacer());
 			optionsMenu.Add(new Menu.Slider("BGM", 0, 10, () => Save.Instance.MusicVolume, Save.Instance.SetMusicVolume));
 			optionsMenu.Add(new Menu.Slider("SFX", 0, 10, () => Save.Instance.SfxVolume, Save.Instance.SetSfxVolume));
@@ -276,7 +291,7 @@ public class World : Scene
 		// update audio
 		Audio.SetListener(Camera);
 
-		// increment playtime (if not in the ending area)
+		// increment total playtime (if not in the ending area)
 		if (!IsInEndingArea)
 		{
 			Save.CurrentRecord.Time += TimeSpan.FromSeconds(Time.Delta);
@@ -285,6 +300,12 @@ public class World : Scene
 		else
 		{
 			Game.Instance.Music.Set("at_baddy", 1);
+		}
+
+		// increment practice timer
+		if (IsPracticeTimerRunState)
+		{
+			Save.CurrentRecord.TimePractice += TimeSpan.FromSeconds(Time.Delta);
 		}
 
 		// handle strawb counter
@@ -784,7 +805,24 @@ public class World : Scene
 				var at = bounds.TopLeft + new Vec2(4, 8);
 				if (IsInEndingArea || Save.Instance.SpeedrunTimer)
 				{
-					UI.Timer(batch, Save.CurrentRecord.Time, at, 0.0f, IsInEndingArea ? Color.CornflowerBlue : Color.White);
+					Color timerDisplayColor;
+					if (IsInEndingArea)
+					{
+						timerDisplayColor = Color.CornflowerBlue;
+					}
+					else if (Save.Instance.SpeedrunTimerPracticeMode && IsPracticeTimerPauseState) 
+					{
+						timerDisplayColor = Color.Yellow;
+					}
+					else if (Save.Instance.SpeedrunTimerPracticeMode && !IsPracticeTimerRunState)
+					{
+						timerDisplayColor = Color.Gray;
+					}
+					else
+					{
+						timerDisplayColor = Color.White;
+					}
+					UI.Timer(batch, Save.Instance.GetCurrentDisplayTime(), at, 0.0f, timerDisplayColor);
 					at.Y += UI.IconSize + 4;
 				}
 
