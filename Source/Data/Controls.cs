@@ -54,7 +54,7 @@ public static class Controls
 		foreach (var it in FindAction(config, "Pause"))
 			it.BindTo(Pause);
         
-        SpeedrunUtilsControls.Load();
+        SpeedrunUtilsControls.Load(config);
 	}
 
 	public static void Clear()

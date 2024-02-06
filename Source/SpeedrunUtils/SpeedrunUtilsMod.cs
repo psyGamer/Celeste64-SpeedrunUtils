@@ -25,7 +25,7 @@ public static class SpeedrunUtilsMod
     
     public static void Update()
     {
-        if (SpeedrunUtilsControls.SaveState.Pressed)
+        if (SpeedrunUtilsControls.SaveState.ConsumePress())
         {
             currentStates[currentSlot]?.Clear();
             currentStates[currentSlot] = SaveState.Create();
@@ -33,7 +33,7 @@ public static class SpeedrunUtilsMod
             toastText = $"Saved save-state slot {currentSlot + 1}";
             toastTimer = ToastTime;
         }
-        if (SpeedrunUtilsControls.LoadState.Pressed || loadQueued)
+        if (SpeedrunUtilsControls.LoadState.ConsumePress() || loadQueued)
         {
             if (!(Game.Instance.transitionStep == Game.TransitionStep.None ||
                   Game.Instance.transitionStep == Game.TransitionStep.FadeIn))
@@ -49,7 +49,7 @@ public static class SpeedrunUtilsMod
                 toastTimer = ToastTime;
             }
         }
-        if (SpeedrunUtilsControls.ClearState.Pressed)
+        if (SpeedrunUtilsControls.ClearState.ConsumePress())
         {
             currentStates[currentSlot]?.Clear();
             currentStates[currentSlot] = null;

@@ -93,6 +93,20 @@ public class ControlsConfig
 
 	public Dictionary<string, List<Binding>> Actions { get; set; } = [];
 	public Dictionary<string, Stick> Sticks { get; set; } = [];
+    
+    public void Merge(ControlsConfig other)
+    {
+        foreach (var (name, bindings) in other.Actions)
+        {
+            if (!Actions.TryAdd(name, bindings))
+                throw new Exception($"Action Binding '{name}' was already present!");
+        }
+        foreach (var (name, stick) in other.Sticks)
+        {
+            if (!Sticks.TryAdd(name, stick))
+                throw new Exception($"Sticks Binding '{name}' was already present!");
+        }
+    }
 
 	public static ControlsConfig Defaults = new()
 	{

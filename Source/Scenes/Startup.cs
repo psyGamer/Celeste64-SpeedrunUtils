@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Celeste64.SpeedrunUtils;
 
 namespace Celeste64;
 
@@ -47,8 +48,9 @@ public class Startup : Scene
 			if (controls == null)
 			{
 				controls = ControlsConfig.Defaults;
+                controls.Merge(SpeedrunUtilsControls.Defaults);
 				using var stream = File.Create(controlsFile);
-				JsonSerializer.Serialize(stream, ControlsConfig.Defaults, ControlsConfigContext.Default.ControlsConfig);
+				JsonSerializer.Serialize(stream, controls, ControlsConfigContext.Default.ControlsConfig);
 				stream.Flush();
 			}
 			
