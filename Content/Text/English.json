@@ -23,7 +23,11 @@
 		"OptionsTimer": "Timer",
 		"OptionsBGM": "BGM",
 		"OptionsSFX": "SFX",
-		"OptionsInvertCamera": "Inverted Camera"
+		"OptionsInvertCamera": "Inverted Camera",
+      
+        "SpeedrunUtils_OptionsTitle": "SpeedrunUtils Options",
+        "SpeedrunUtils_PauseOptions": "SpeedrunUtils Options",
+        "SpeedrunUtils_PracticeTimer": "Practice Timer"
 	},
 	"Dialog":
 	{

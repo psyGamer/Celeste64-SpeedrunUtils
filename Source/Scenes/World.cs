@@ -96,12 +96,14 @@ public class World : Scene
 			optionsMenu.Add(new Menu.Toggle(Loc.Str("OptionsFullscreen"), Save.Instance.ToggleFullscreen, () => Save.Instance.Fullscreen));
 			optionsMenu.Add(new Menu.Toggle(Loc.Str("OptionsZGuide"), Save.Instance.ToggleZGuide, () => Save.Instance.ZGuide));
 			optionsMenu.Add(new Menu.Toggle(Loc.Str("OptionsTimer"), Save.Instance.ToggleTimer, () => Save.Instance.SpeedrunTimer));
-            // TODO: Localize
-            optionsMenu.Add(new Menu.Toggle("Speedrun Practice Timer", Save.Instance.ToggleSpeedrunPracticeTime, () => Save.Instance.SpeedrunPracticeTimer));
 			optionsMenu.Add(new Menu.MultiSelect<Save.InvertCameraOptions>(Loc.Str("OptionsInvertCamera"), Save.Instance.SetCameraInverted, () => Save.Instance.InvertCamera));
 			optionsMenu.Add(new Menu.Spacer());
 			optionsMenu.Add(new Menu.Slider(Loc.Str("OptionsBGM"), 0, 10, () => Save.Instance.MusicVolume, Save.Instance.SetMusicVolume));
 			optionsMenu.Add(new Menu.Slider(Loc.Str("OptionsSFX"), 0, 10, () => Save.Instance.SfxVolume, Save.Instance.SetSfxVolume));
+            
+            Menu speedrunMenu = new();
+            speedrunMenu.Title = Loc.Str("SpeedrunUtils_OptionsTitle");
+            speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer"), Save.Instance.ToggleSpeedrunPracticeTime, () => Save.Instance.SpeedrunPracticeTimer));
 
 			pauseMenu.Title = Loc.Str("PauseTitle");
             pauseMenu.Add(new Menu.Option(Loc.Str("PauseResume"), () => SetPaused(false)));
@@ -112,6 +114,7 @@ public class World : Scene
 				Get<Player>()?.Kill();
 			}));
 			pauseMenu.Add(new Menu.Submenu(Loc.Str("PauseOptions"), pauseMenu, optionsMenu));
+            pauseMenu.Add(new Menu.Submenu(Loc.Str("SpeedrunUtils_PauseOptions"), pauseMenu, speedrunMenu));
 			pauseMenu.Add(new Menu.Option(Loc.Str("PauseSaveQuit"), () => Game.Instance.Goto(new Transition()
 			{
 				Mode = Transition.Modes.Replace,
