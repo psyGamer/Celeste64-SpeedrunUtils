@@ -8,7 +8,7 @@ public static class SpeedrunUtilsMod
     private static string toastText = string.Empty;
     private static float toastTimer = 0.0f;
         
-    private const int MaxSaveStateSlots = 10;
+    public const int MaxSaveStateSlots = 10;
     private static int currentSlot = 0;
     private static bool loadQueued = false;
     private static readonly SaveState?[] currentStates = new SaveState[MaxSaveStateSlots];
@@ -59,21 +59,18 @@ public static class SpeedrunUtilsMod
         }
         
         // Switch between save-state slots
-        int oldSlot = currentSlot;
-        if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D1)) currentSlot = 0;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D2)) currentSlot = 1;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D3)) currentSlot = 2;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D4)) currentSlot = 3;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D5)) currentSlot = 4;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D6)) currentSlot = 5;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D7)) currentSlot = 6;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D8)) currentSlot = 7;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D9)) currentSlot = 8;
-        else if (Input.Keyboard.Down(Keys.LeftControl) && Input.Keyboard.Down(Keys.D0)) currentSlot = 9;
-        if (oldSlot != currentSlot)
+        if (SpeedrunUtilsControls.SlotChangeModDown)
         {
-            toastText = $"Selected save-state slot {currentSlot + 1}";
-            toastTimer = ToastTime;
+            int oldSlot = currentSlot;
+            for (int i = 0; i < MaxSaveStateSlots; i++)
+            {
+                if (SpeedrunUtilsControls.Slots[i].ConsumePress()) currentSlot = i;
+            }
+            if (oldSlot != currentSlot)
+            {
+                toastText = $"Selected save-state slot {currentSlot + 1}";
+                toastTimer = ToastTime;
+            }
         }
         
         toastTimer -= Time.Delta;

@@ -6,6 +6,22 @@ public class SpeedrunUtilsControls
     public static readonly VirtualButton LoadState = new("LoadState");
     public static readonly VirtualButton ClearState = new("ClearState");
     
+    public static bool SlotChangeModDown => SlotChangeMod.Down || SlotChangeMod.Bindings.Count == 0; 
+    private static readonly VirtualButton SlotChangeMod = new("SlotChangeMod");
+    public static readonly VirtualButton[] Slots = new VirtualButton[SpeedrunUtilsMod.MaxSaveStateSlots]
+    {
+        new("Slot0"),
+        new("Slot1"),
+        new("Slot2"),
+        new("Slot3"),
+        new("Slot4"),
+        new("Slot5"),
+        new("Slot6"),
+        new("Slot7"),
+        new("Slot8"),
+        new("Slot9"),
+    };
+    
     public static void Load(ControlsConfig? config = null)
     {
         // Taken from Controls.Load()
@@ -24,6 +40,14 @@ public class SpeedrunUtilsControls
             it.BindTo(LoadState);
         foreach (var it in FindAction(config, "SpeedrunUtils_ClearState"))
             it.BindTo(ClearState);
+        
+        foreach (var it in FindAction(config, "SpeedrunUtils_SlotChangeMod"))
+            it.BindTo(SlotChangeMod);
+        for (int i = 0; i < Slots.Length; i++)
+        {
+            foreach (var it in FindAction(config, $"SpeedrunUtils_Slot{i}"))
+                it.BindTo(Slots[i]);
+        }
     }
     
     public static ControlsConfig Defaults = new()
@@ -39,6 +63,21 @@ public class SpeedrunUtilsControls
 				new(Keys.F4),
                 new(Keys.F6),
 			],
+            
+            ["SpeedrunUtils_SlotChangeMod"] = [
+                new (Keys.LeftControl),
+                new (Keys.RightControl),
+            ],
+            ["SpeedrunUtils_Slot0"] = [new (Keys.D1)],
+            ["SpeedrunUtils_Slot1"] = [new (Keys.D2)],
+            ["SpeedrunUtils_Slot2"] = [new (Keys.D3)],
+            ["SpeedrunUtils_Slot3"] = [new (Keys.D4)],
+            ["SpeedrunUtils_Slot4"] = [new (Keys.D5)],
+            ["SpeedrunUtils_Slot5"] = [new (Keys.D6)],
+            ["SpeedrunUtils_Slot6"] = [new (Keys.D7)],
+            ["SpeedrunUtils_Slot7"] = [new (Keys.D8)],
+            ["SpeedrunUtils_Slot8"] = [new (Keys.D9)],
+            ["SpeedrunUtils_Slot9"] = [new (Keys.D0)],
 		},
 	};
 }
