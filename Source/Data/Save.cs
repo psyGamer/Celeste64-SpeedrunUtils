@@ -70,6 +70,11 @@ public class Save
 	/// </summary>
 	public bool SpeedrunTimer { get; set; } = false;
 
+    /// <summary>
+    /// Allows you to recollect strawberries / cassettes
+    /// </summary>
+    public bool SpeedrunRecollectItems { get; set; } = false;
+    
 	/// <summary>
 	/// If the Speeedrun Timer should display in "practice" mode rather than show the total playtime
 	/// When practice mode is enabled:
@@ -164,6 +169,11 @@ public class Save
 		SpeedrunTimer = !SpeedrunTimer;
 	}
 	
+    public void ToggleSpeedrunRecollectItems()
+    {
+        SpeedrunRecollectItems = !SpeedrunRecollectItems;
+    }
+
 	public void ToggleSpeedrunPracticeTime()
 	{
 		SpeedrunPracticeTimer = !SpeedrunPracticeTimer;

@@ -103,6 +103,7 @@ public class World : Scene
             
             Menu speedrunMenu = new();
             speedrunMenu.Title = Loc.Str("SpeedrunUtils_OptionsTitle");
+            speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_RecollectItems"), Save.Instance.ToggleSpeedrunRecollectItems, () => Save.Instance.SpeedrunRecollectItems));
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer"), Save.Instance.ToggleSpeedrunPracticeTime, () => Save.Instance.SpeedrunPracticeTimer));
 
 			pauseMenu.Title = Loc.Str("PauseTitle");
