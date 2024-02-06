@@ -41,8 +41,8 @@ public class Game : Module
 	public const int Width = 640;
 	public const int Height = 360;
 	public static readonly Version Version = typeof(Game).Assembly.GetName().Version!;
-    public static string TASVersion => string.IsNullOrEmpty(BuildProperties.ModVersion()) ? "dev" : BuildProperties.ModVersion();
-    public static string VersionString => $"v.{Version.Major}.{Version.Minor}.{Version.Build} - SpeedrunUtils v.{TASVersion}";
+    public static string ModVersion => string.IsNullOrEmpty(BuildProperties.ModVersion()) ? "dev" : BuildProperties.ModVersion();
+    public static string VersionString => $"v.{Version.Major}.{Version.Minor}.{Version.Build} - SpeedrunUtils v.{ModVersion}";
 
 	/// <summary>
 	/// Used by various rendering elements to proportionally scale if you change the default game resolution

@@ -94,11 +94,46 @@ public class Menu
 		}
 	}
 
+	public class MultiSelect(string label, List<string> options, Func<int> get, Action<int> set) : Item
+	{
+		private readonly List<string> options = options;
+		private readonly Action<int> set = set;
+		public override string Label => $"{label} : {options[get()]}";
+
+		public override void Slide(int dir) 
+		{
+			Audio.Play(Sfx.ui_select);
+
+			int index = get();
+			if (index < options.Count() - 1 && dir == 1)
+				index++;
+			if (index > 0 && dir == -1)
+				index--;
+			set(index);
+		}
+	}
+
+	public class MultiSelect<T> : MultiSelect where T : struct, Enum
+	{
+		private static List<string> GetEnumOptions()
+		{
+			var list = new List<string>();
+			foreach (var it in Enum.GetNames<T>())
+				list.Add(it);
+			return list;
+		}
+
+		public MultiSelect(string label, Action<T> set, Func<T> get)
+			: base(label, GetEnumOptions(), () => (int)(object)get(), (i) => set((T)(object)i))
+		{
+
+		}
+	}
+
 	public int Index;
 	public string Title = string.Empty;
 	public bool Focused = true;
 
-	private readonly SpriteFont font;
 	private readonly List<Item> items = [];
 	private readonly Stack<Menu> submenus = [];
 
@@ -112,7 +147,8 @@ public class Menu
 	{
 		get
 		{
-			Vec2 size = Vec2.Zero;
+			var size = Vec2.Zero;
+			var font = Language.Current.SpriteFont;
 	
 			if (!string.IsNullOrEmpty(Title))
 			{
@@ -140,11 +176,6 @@ public class Menu
 	
 			return size;
 		}
-	}
-	
-	public Menu()
-	{
-		font = Assets.Fonts.First().Value;
 	}
 	
 	public Menu Add(Item item)
@@ -199,7 +230,7 @@ public class Menu
 		{
 			CurrentMenu.HandleInput();
 
-	        if (Controls.Cancel.Pressed && !IsInMainMenu) 
+	        if (!IsInMainMenu && Controls.Cancel.ConsumePress()) 
 			{
 				Audio.Play(Sfx.main_menu_toggle_off);
 				submenus.Pop();
@@ -209,6 +240,7 @@ public class Menu
 
 	private void RenderItems(Batcher batch)
 	{
+		var font = Language.Current.SpriteFont;
 		var size = Size;
 		var position = Vec2.Zero;
 		batch.PushMatrix(-size / 2);
