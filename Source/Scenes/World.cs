@@ -46,17 +46,9 @@ public class World : Scene
 
 	private bool IsInEndingArea => Get<Player>() is {} player && Overlaps<EndingArea>(player.Position);
 	
-	private bool IsSpeedrunPracticeTimerPaused => Get<Player>() is { } player && player.IsSpeedrunPracticeTimePaused;
+	private bool IsPlayerMidPickup => Get<Player>() is {} player && player.IsMidPickup;
 
-	private bool IsSpeedrunPracticeTimerRunning
-	{
-		get
-		{
-			if (Game.Instance.IsMidTransition) return false;
-			if (Get<Player>() is not { } player) return true;
-			return player.IsAbleToPause;
-		}
-	}
+	private bool IsPlayerActive => Get<Player>() is {} player && player.IsActive;
 	
 	private bool IsPauseEnabled
 	{
@@ -307,8 +299,8 @@ public class World : Scene
 			Game.Instance.Music.Set("at_baddy", 1);
 		}
 
-		// increment practice timer
-		if (IsSpeedrunPracticeTimerRunning)
+		// increment practice timer (if not in the ending area)
+		if (IsPlayerActive && !IsInEndingArea)
 		{
 			Save.CurrentRecord.SpeedrunPracticeTime += TimeSpan.FromSeconds(Time.Delta);
 		}
@@ -817,11 +809,11 @@ public class World : Scene
 					{
 						timerDisplayColor = Color.CornflowerBlue;
 					}
-					else if (Save.Instance.SpeedrunPracticeTimer && IsSpeedrunPracticeTimerPaused) 
+					else if (Save.Instance.SpeedrunPracticeTimer && IsPlayerMidPickup)
 					{
 						timerDisplayColor = Color.Yellow;
 					}
-					else if (Save.Instance.SpeedrunPracticeTimer && !IsSpeedrunPracticeTimerRunning)
+					else if (Save.Instance.SpeedrunPracticeTimer && !IsPlayerActive)
 					{
 						timerDisplayColor = Color.Gray;
 					}

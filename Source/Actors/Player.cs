@@ -187,10 +187,18 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		&& stateMachine.State != States.StrawbGet
 		&& stateMachine.State != States.Cassette
 		&& stateMachine.State != States.Dead;
-    
-    public bool IsSpeedrunPracticeTimePaused 
+
+    public bool IsMidPickup
         => stateMachine.State == States.StrawbGet 
         || stateMachine.State == States.Cassette;
+
+    public bool IsActive
+	    => stateMachine.State != States.StrawbGet
+	    && stateMachine.State != States.Cassette
+	    && stateMachine.State != States.StrawbReveal
+	    && stateMachine.State != States.Respawn
+	    && stateMachine.State != States.Dead;
+
 
 	public Player()
 	{
@@ -2140,6 +2148,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		drawModel = drawHair = true;
 		cameraOverride = null;
 		PointShadowAlpha = 1;
+
+		Save.CurrentRecord.ResetSpeedrunPracticeTime();
 	}
 
 	#endregion
