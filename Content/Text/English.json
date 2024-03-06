@@ -28,7 +28,8 @@
         "SpeedrunUtils_OptionsTitle": "SpeedrunUtils Options",
         "SpeedrunUtils_PauseOptions": "SpeedrunUtils Options",
         "SpeedrunUtils_RecollectItems": "Recollect Collectibles",
-        "SpeedrunUtils_PracticeTimer": "Practice Timer"
+        "SpeedrunUtils_PracticeTimer": "Practice Timer",
+        "SpeedrunUtils_PracticeTimer_PauseInMenu": "Pause the timer while the menu is open"
 	},
 	"Dialog":
 	{

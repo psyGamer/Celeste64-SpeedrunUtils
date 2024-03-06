@@ -84,6 +84,9 @@ public class Save
 	/// </summary>
 	public bool SpeedrunPracticeTimer { get; set; } = false;
 
+	// If the Speedrun Timer should be paused when it is in "practice" mode and the pause menu is open
+	public bool SpeedrunPracticeTimerPauseInMenu { get; set; } = false;
+
 	/// <summary>
 	/// 0-10 Music volume level
 	/// </summary>
@@ -177,6 +180,11 @@ public class Save
 	public void ToggleSpeedrunPracticeTime()
 	{
 		SpeedrunPracticeTimer = !SpeedrunPracticeTimer;
+	}
+
+	public void ToggleSpeedrunPracticeTimerPauseInMenu()
+	{
+		SpeedrunPracticeTimerPauseInMenu = !SpeedrunPracticeTimerPauseInMenu;
 	}
 
 	public TimeSpan GetCurrentDisplayTime()

@@ -97,6 +97,7 @@ public class World : Scene
             speedrunMenu.Title = Loc.Str("SpeedrunUtils_OptionsTitle");
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_RecollectItems"), Save.Instance.ToggleSpeedrunRecollectItems, () => Save.Instance.SpeedrunRecollectItems));
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer"), Save.Instance.ToggleSpeedrunPracticeTime, () => Save.Instance.SpeedrunPracticeTimer));
+            speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer_PauseInMenu"), Save.Instance.ToggleSpeedrunPracticeTimerPauseInMenu, () => Save.Instance.SpeedrunPracticeTimerPauseInMenu));
 
 			pauseMenu.Title = Loc.Str("PauseTitle");
             pauseMenu.Add(new Menu.Option(Loc.Str("PauseResume"), () => SetPaused(false)));
@@ -300,7 +301,7 @@ public class World : Scene
 		}
 
 		// increment practice timer (if not in the ending area)
-		if (IsPlayerActive && !IsInEndingArea)
+		if (IsPlayerActive && !IsInEndingArea && !(Save.Instance.SpeedrunPracticeTimerPauseInMenu && Paused))
 		{
 			Save.CurrentRecord.SpeedrunPracticeTime += TimeSpan.FromSeconds(Time.Delta);
 		}
