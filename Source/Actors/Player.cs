@@ -164,6 +164,8 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 	private Vec3 SolidHeadTestPos 
 		=> Position + Vec3.UnitZ * 10;
 
+	public bool InCheckpointRange = false;
+
 	private bool InFeatherState 
 		=> stateMachine.State == States.FeatherStart
 		|| stateMachine.State == States.Feather;
@@ -188,17 +190,16 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		&& stateMachine.State != States.Cassette
 		&& stateMachine.State != States.Dead;
 
-    public bool IsMidPickup
-        => stateMachine.State == States.StrawbGet 
-        || stateMachine.State == States.Cassette;
+	public bool IsMidPickup 
+		=> stateMachine.State == States.StrawbGet
+		|| stateMachine.State == States.Cassette;
 
-    public bool IsActive
-	    => stateMachine.State != States.StrawbGet
-	    && stateMachine.State != States.Cassette
-	    && stateMachine.State != States.StrawbReveal
-	    && stateMachine.State != States.Respawn
-	    && stateMachine.State != States.Dead;
-
+	public bool IsActive 
+		=> stateMachine.State != States.StrawbGet
+		&& stateMachine.State != States.Cassette
+		&& stateMachine.State != States.StrawbReveal
+		&& stateMachine.State != States.Respawn
+		&& stateMachine.State != States.Dead;
 
 	public Player()
 	{
@@ -391,12 +392,19 @@ public class Player : Actor, IHaveModels, IHaveSprites, IRidePlatforms, ICastPoi
 		// pickups
 		if (IsAbleToPickup)
 		{
+			InCheckpointRange = false;
+
 			foreach (var actor in World.All<IPickup>())
 			{
 				if (actor is IPickup pickup)
 				{
 					if ((SolidWaistTestPos - actor.Position).LengthSquared() < pickup.PickupRadius * pickup.PickupRadius)
+					{
+						if (actor is Checkpoint)
+							InCheckpointRange = true;
+
 						pickup.Pickup(this);
+					}
 				}
 			}
 		}

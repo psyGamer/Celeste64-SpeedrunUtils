@@ -50,6 +50,8 @@ public class World : Scene
 
 	private bool IsPlayerActive => Get<Player>() is {} player && player.IsActive;
 	
+	private bool IsPlayerInCheckpointRange => Get<Player>() is {} player && player.InCheckpointRange;
+
 	private bool IsPauseEnabled
 	{
 		get
@@ -98,6 +100,7 @@ public class World : Scene
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_RecollectItems"), Save.Instance.ToggleSpeedrunRecollectItems, () => Save.Instance.SpeedrunRecollectItems));
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer"), Save.Instance.ToggleSpeedrunPracticeTime, () => Save.Instance.SpeedrunPracticeTimer));
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer_PauseInMenu"), Save.Instance.ToggleSpeedrunPracticeTimerPauseInMenu, () => Save.Instance.SpeedrunPracticeTimerPauseInMenu));
+            speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer_PauseNearCheckpoint"), Save.Instance.ToggleSpeedrunPracticeTimerPauseNearCheckpoint, () => Save.Instance.SpeedrunPracticeTimerPauseNearCheckpoint));
 
 			pauseMenu.Title = Loc.Str("PauseTitle");
             pauseMenu.Add(new Menu.Option(Loc.Str("PauseResume"), () => SetPaused(false)));
@@ -300,8 +303,11 @@ public class World : Scene
 			Game.Instance.Music.Set("at_baddy", 1);
 		}
 
-		// increment practice timer (if not in the ending area)
-		if (IsPlayerActive && !IsInEndingArea && !(Save.Instance.SpeedrunPracticeTimerPauseInMenu && Paused))
+		// increment practice timer
+		if (IsPlayerActive &&
+		    !IsInEndingArea &&
+		    !(Save.Instance.SpeedrunPracticeTimerPauseNearCheckpoint && IsPlayerInCheckpointRange) &&
+		    !(Save.Instance.SpeedrunPracticeTimerPauseInMenu && Paused))
 		{
 			Save.CurrentRecord.SpeedrunPracticeTime += TimeSpan.FromSeconds(Time.Delta);
 		}

@@ -29,7 +29,8 @@
         "SpeedrunUtils_PauseOptions": "SpeedrunUtils Options",
         "SpeedrunUtils_RecollectItems": "Recollect Collectibles",
         "SpeedrunUtils_PracticeTimer": "Practice Timer",
-        "SpeedrunUtils_PracticeTimer_PauseInMenu": "Pause the timer while the menu is open"
+        "SpeedrunUtils_PracticeTimer_PauseInMenu": "Pause practice timer while menu is open",
+        "SpeedrunUtils_PracticeTimer_PauseNearCheckpoint": "Pause practice timer while near a checkpoint"
 	},
 	"Dialog":
 	{
