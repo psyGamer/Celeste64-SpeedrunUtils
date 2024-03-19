@@ -84,6 +84,12 @@ public class Save
 	/// </summary>
 	public bool SpeedrunPracticeTimer { get; set; } = false;
 
+	// If the Speedrun Timer should be paused when practice mode is enabled and the pause menu is open
+	public bool SpeedrunPracticeTimerPauseInMenu { get; set; } = false;
+
+	// If the Speedrun Timer should be paused when practice mode is enabled and the player is within range of a checkpoint
+	public bool SpeedrunPracticeTimerPauseNearCheckpoint { get; set; } = false;
+
 	/// <summary>
 	/// 0-10 Music volume level
 	/// </summary>
@@ -177,6 +183,16 @@ public class Save
 	public void ToggleSpeedrunPracticeTime()
 	{
 		SpeedrunPracticeTimer = !SpeedrunPracticeTimer;
+	}
+
+	public void ToggleSpeedrunPracticeTimerPauseInMenu()
+	{
+		SpeedrunPracticeTimerPauseInMenu = !SpeedrunPracticeTimerPauseInMenu;
+	}
+
+	public void ToggleSpeedrunPracticeTimerPauseNearCheckpoint()
+	{
+		SpeedrunPracticeTimerPauseNearCheckpoint = !SpeedrunPracticeTimerPauseNearCheckpoint;
 	}
 
 	public TimeSpan GetCurrentDisplayTime()
