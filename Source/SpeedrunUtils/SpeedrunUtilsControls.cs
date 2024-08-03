@@ -5,6 +5,7 @@ public class SpeedrunUtilsControls
     public static readonly VirtualButton SaveState = new("SaveState");
     public static readonly VirtualButton LoadState = new("LoadState");
     public static readonly VirtualButton ClearState = new("ClearState");
+    public static readonly VirtualButton ToggleSlowdown = new("ToggleSlowdown");
     
     public static bool SlotChangeModDown => SlotChangeMod.Down || SlotChangeMod.Bindings.Count == 0; 
     private static readonly VirtualButton SlotChangeMod = new("SlotChangeMod");
@@ -40,6 +41,8 @@ public class SpeedrunUtilsControls
             it.BindTo(LoadState);
         foreach (var it in FindAction(config, "SpeedrunUtils_ClearState"))
             it.BindTo(ClearState);
+        foreach (var it in FindAction(config, "SpeedrunUtils_ToggleSlowdown"))
+            it.BindTo(ToggleSlowdown);
         
         foreach (var it in FindAction(config, "SpeedrunUtils_SlotChangeMod"))
             it.BindTo(SlotChangeMod);
@@ -63,6 +66,9 @@ public class SpeedrunUtilsControls
 				new(Keys.F4),
                 new(Keys.F6),
 			],
+            ["SpeedrunUtils_ToggleSlowdown"] = [
+                new (Keys.F3),
+            ],
             
             ["SpeedrunUtils_SlotChangeMod"] = [
                 new (Keys.LeftControl),

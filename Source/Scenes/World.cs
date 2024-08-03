@@ -101,6 +101,7 @@ public class World : Scene
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer"), Save.Instance.ToggleSpeedrunPracticeTime, () => Save.Instance.SpeedrunPracticeTimer));
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer_PauseInMenu"), Save.Instance.ToggleSpeedrunPracticeTimerPauseInMenu, () => Save.Instance.SpeedrunPracticeTimerPauseInMenu));
             speedrunMenu.Add(new Menu.Toggle(Loc.Str("SpeedrunUtils_PracticeTimer_PauseNearCheckpoint"), Save.Instance.ToggleSpeedrunPracticeTimerPauseNearCheckpoint, () => Save.Instance.SpeedrunPracticeTimerPauseNearCheckpoint));
+            speedrunMenu.Add(new Menu.Slider(Loc.Str("SpeedrunUtils_SlowdownFactor"), 1, 10, () => (int)(Save.Instance.SpeedrunSlowdownFactor * 10.0f), Save.Instance.SetSpeedrunSlowdownFactor));
 
 			pauseMenu.Title = Loc.Str("PauseTitle");
             pauseMenu.Add(new Menu.Option(Loc.Str("PauseResume"), () => SetPaused(false)));

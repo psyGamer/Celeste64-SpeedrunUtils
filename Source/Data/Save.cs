@@ -89,6 +89,8 @@ public class Save
 
 	// If the Speedrun Timer should be paused when practice mode is enabled and the player is within range of a checkpoint
 	public bool SpeedrunPracticeTimerPauseNearCheckpoint { get; set; } = false;
+    
+    public float SpeedrunSlowdownFactor { get; set; } = 0.5f;
 
 	/// <summary>
 	/// 0-10 Music volume level
@@ -194,6 +196,11 @@ public class Save
 	{
 		SpeedrunPracticeTimerPauseNearCheckpoint = !SpeedrunPracticeTimerPauseNearCheckpoint;
 	}
+    
+    public void SetSpeedrunSlowdownFactor(int value)
+    {
+        SpeedrunSlowdownFactor = value / 10.0f;
+    }
 
 	public TimeSpan GetCurrentDisplayTime()
 	{

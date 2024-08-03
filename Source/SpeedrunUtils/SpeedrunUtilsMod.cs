@@ -13,6 +13,9 @@ public static class SpeedrunUtilsMod
     private static bool loadQueued = false;
     private static readonly SaveState?[] currentStates = new SaveState[MaxSaveStateSlots];
     
+    private static bool slowdown = false;
+    public static float GameSpeed => slowdown ? Time.Delta * Save.Instance.SpeedrunSlowdownFactor : Time.Delta;
+    
     public static void Load()
     {
         SaveState.Configure();
@@ -56,6 +59,11 @@ public static class SpeedrunUtilsMod
             
             toastText = $"Cleared save-state slot {currentSlot + 1}";
             toastTimer = ToastTime;
+        }
+        
+        if (SpeedrunUtilsControls.ToggleSlowdown.ConsumePress())
+        {
+            slowdown = !slowdown;
         }
         
         // Switch between save-state slots

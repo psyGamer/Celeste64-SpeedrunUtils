@@ -118,10 +118,17 @@ public class Game : Module
 		if (transition.StopMusic)
 			Music.Stop();
 	}
-
+    
+    private float ellapsedTime = 0.0f;
+    
 	public override void Update()
 	{
         SpeedrunUtilsMod.Update();
+        
+        ellapsedTime += SpeedrunUtilsMod.GameSpeed;
+        if (ellapsedTime < Time.Delta)
+            return;
+        ellapsedTime -= Time.Delta;
         
 		// update top scene
 		if (scenes.TryPeek(out var scene))
